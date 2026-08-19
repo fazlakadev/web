@@ -882,7 +882,7 @@
     "latestVersion": "Latest version",
     "releasedOn": "Released on",
     "android": "Android",
-    "androidDesc": "Available now on Google Play. Optimized for all Android devices.",
+    "androidDesc": "Download the APK directly from our website. Easy, fast, and secure.",
     "windows": "Windows",
     "windowsDesc": "Desktop app for Windows. Coming soon.",
     "mac": "macOS",
@@ -900,7 +900,7 @@
     "loading": "Loading version info…",
     "error": "Could not load version information.",
     "retry": "Try again",
-    "systemRequirements": "Requires Android 6.0+",
-    "requirementAndroid": "Android 6.0 or higher"
+    "systemRequirements": "Download size ~10MB",
+    "requirementAndroid": "Requires Android 8.0+"
   }
 }

@@ -12,11 +12,14 @@ interface BaseCardProps {
 
 function PlayBadge() {
   return (
-    <span className="flex size-11 items-center justify-center rounded-full bg-brand-gradient text-white shadow-glow transition-transform duration-300 group-hover:scale-110">
+    <span className="flex size-11 scale-50 items-center justify-center rounded-full bg-brand-gradient text-white shadow-glow transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110">
       <Play className="size-5 translate-x-px" fill="currentColor" />
     </span>
   );
 }
+
+const CARD_SHELL =
+  "relative overflow-hidden rounded-2xl border border-border glass-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card group-hover:ring-2 group-hover:ring-primary/20";
 
 export function EpisodePosterCard({
   episode,
@@ -35,8 +38,8 @@ export function EpisodePosterCard({
     : null;
 
   return (
-    <Link href={`/watch/${episode.slug}`} className={cn("group block", className)}>
-      <div className="relative overflow-hidden rounded-2xl border border-border glass-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card">
+    <Link href={`/watch/${episode.slug}`} className={cn("group block transition-transform duration-300 hover:-translate-y-1.5", className)}>
+      <div className={CARD_SHELL}>
         <div className="aspect-video w-full bg-secondary">
           {episode.coverImage ? (
             <Image
@@ -89,8 +92,8 @@ export function SeasonPosterCard({
   const count = season._count?.episodes ?? season.episodes?.length ?? 0;
 
   return (
-    <Link href={`/season/${season.slug}`} className={cn("group block", className)}>
-      <div className="relative overflow-hidden rounded-2xl border border-border glass-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card">
+    <Link href={`/season/${season.slug}`} className={cn("group block transition-transform duration-300 hover:-translate-y-1.5", className)}>
+      <div className={CARD_SHELL}>
         <div className="aspect-video w-full bg-secondary">
           {season.coverImage ? (
             <Image
@@ -139,9 +142,9 @@ export function PlaylistPosterCard({
   return (
     <Link
       href={`/playlist/${playlist.slug}`}
-      className={cn("group block", className)}
+      className={cn("group block transition-transform duration-300 hover:-translate-y-1.5", className)}
     >
-      <div className="relative overflow-hidden rounded-2xl border border-border glass-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card">
+      <div className={CARD_SHELL}>
         <div className="aspect-video w-full bg-secondary">
           {playlist.coverImage ? (
             <Image

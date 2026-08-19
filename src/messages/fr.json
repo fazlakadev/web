@@ -468,7 +468,9 @@
     "privacy": "Politique de confidentialité",
     "contact": "Contact",
     "explore": "Explorer",
-    "account": "Compte"
+    "account": "Compte",
+    "company": "Entreprise",
+    "getApp": "Télécharger l'app"
   },
   "settings": {
     "title": "Paramètres",
@@ -871,7 +873,7 @@
     "latestVersion": "Dernière version",
     "releasedOn": "Publié le",
     "android": "Android",
-    "androidDesc": "Disponible sur Google Play. Optimisé pour tous les appareils Android.",
+    "androidDesc": "Téléchargez l'APK directement depuis notre site. Simple, rapide et sécurisé.",
     "windows": "Windows",
     "windowsDesc": "Application de bureau pour Windows. Bientôt disponible.",
     "mac": "macOS",
@@ -889,7 +891,7 @@
     "loading": "Chargement des informations de version…",
     "error": "Impossible de charger les informations de version.",
     "retry": "Réessayer",
-    "systemRequirements": "Nécessite Android 6.0 ou supérieur",
-    "requirementAndroid": "Android 6.0 ou supérieur"
+    "systemRequirements": "Taille du téléchargement ~10 Mo",
+    "requirementAndroid": "Nécessite Android 8.0 ou supérieur"
   }
 }

@@ -30,9 +30,12 @@ export function ArticleCard({
     return (
       <Link
         href={`/articles/${article.slug}`}
-        className={cn("group block", className)}
+        className={cn(
+          "group block transition-transform duration-300 hover:-translate-y-1.5",
+          className,
+        )}
       >
-        <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card">
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card group-hover:ring-2 group-hover:ring-primary/20">
           <div className="aspect-[16/9] w-full bg-secondary sm:aspect-[21/9]">
             {article.coverImage ? (
               <Image
@@ -77,8 +80,14 @@ export function ArticleCard({
   }
 
   return (
-    <Link href={`/articles/${article.slug}`} className={cn("group block", className)}>
-      <div className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card">
+    <Link
+      href={`/articles/${article.slug}`}
+      className={cn(
+        "group block transition-transform duration-300 hover:-translate-y-1.5",
+        className,
+      )}
+    >
+      <div className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-card group-hover:ring-2 group-hover:ring-primary/20">
         <div className="aspect-video w-full bg-secondary">
           {article.coverImage ? (
             <Image

@@ -13,7 +13,7 @@ import { Background } from "@/components/background";
 import { VerifyEmailBanner } from "@/components/verify-email-banner";
 import { IncomingCallPopup } from "@/components/incoming-call-popup";
 import { OnboardingFlow } from "@/components/onboarding-flow";
-import { WelcomeToast } from "@/components/welcome-toast";
+import { WelcomeBanner } from "@/components/welcome-banner";
 import { TermsConsentModal } from "@/components/terms-consent-modal";
 import "./../globals.css";
 
@@ -90,7 +90,7 @@ export default async function LocaleLayout({
               <Toaster richColors position="top-center" />
               <IncomingCallPopup />
               <OnboardingFlow />
-              <WelcomeToast />
+              <WelcomeBanner />
               <TermsConsentModal />
             </AuthProvider>
           </ThemeProvider>

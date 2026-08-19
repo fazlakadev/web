@@ -39,8 +39,12 @@ export function Hero({
           <div className="absolute inset-x-10 -top-16 mx-auto h-72 max-w-4xl rounded-b-[100%] bg-brand-gradient opacity-20 blur-3xl" />
         </div>
 
-        <div className="rounded-[2.5rem] bg-gradient-to-br from-primary/50 via-transparent to-fuchsia-500/40 p-px shadow-lifted">
-          <div className="relative overflow-hidden rounded-[2.5rem] border border-transparent">
+        <div className="relative rounded-[2.5rem] p-px shadow-lifted">
+          <div
+            aria-hidden
+            className="conic-border absolute inset-0 overflow-hidden rounded-[2.5rem]"
+          />
+          <div className="relative overflow-hidden rounded-[2.49rem] border border-transparent bg-card">
           <div className="absolute inset-0">
             {hero.coverImage ? (
               <Image
@@ -62,7 +66,7 @@ export function Hero({
 
           <div className="relative flex min-h-[420px] flex-col justify-end p-6 sm:min-h-[480px] sm:p-10">
             <div className="max-w-2xl animate-hero-in">
-              <div className="mb-4 flex flex-wrap items-center gap-2">
+              <div className="stagger-in mb-4 flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-bold text-primary backdrop-blur">
                   <Sparkles className="size-3.5" />
                   {episodesLabel}
@@ -91,7 +95,7 @@ export function Hero({
                 </span>
               </div>
 
-              <h1 className="text-3xl font-black leading-tight tracking-tight sm:text-5xl">
+              <h1 className="text-3xl font-black leading-tight tracking-tight text-shimmer sm:text-5xl">
                 {title}
               </h1>
 
@@ -104,14 +108,14 @@ export function Hero({
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <Link
                   href={`/watch/${hero.slug}`}
-                  className="inline-flex items-center gap-2.5 rounded-full bg-brand-gradient px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-glow transition-all duration-200 hover:brightness-110 active:scale-[0.98]"
+                  className="shine inline-flex items-center gap-2.5 rounded-full bg-brand-gradient px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-glow transition-all duration-200 hover:scale-[1.03] hover:brightness-110 active:scale-[0.98] animate-pulse-ring"
                 >
                   <Play className="size-4" fill="currentColor" />
                   {watchLabel}
                 </Link>
                 <Link
                   href={`/watch/${hero.slug}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-6 py-3.5 text-sm font-semibold text-foreground backdrop-blur transition-colors hover:bg-accent"
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-6 py-3.5 text-sm font-semibold text-foreground backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent"
                 >
                   <Info className="size-4" />
                   {moreDetailsLabel}
@@ -123,7 +127,7 @@ export function Hero({
         </div>
 
         {rest.length > 0 && (
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="stagger-in mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {rest.map((ep, i) => (
               <Link
                 key={ep.id}
@@ -138,18 +142,18 @@ export function Hero({
                       width={320}
                       height={180}
                       unoptimized
-                      className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
                     <div className="flex size-full items-center justify-center bg-brand-gradient opacity-40" />
                   )}
                 </div>
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
-                <span className="absolute start-2 top-2 flex size-6 items-center justify-center rounded-md bg-black/60 text-[11px] font-bold text-white backdrop-blur">
+                <span className="absolute start-2 top-2 flex size-6 items-center justify-center rounded-md bg-brand-gradient text-[11px] font-bold text-white shadow-glow">
                   {i + 2}
                 </span>
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                  <span className="flex size-10 items-center justify-center rounded-full bg-brand-gradient text-white shadow-glow">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="flex size-10 scale-50 items-center justify-center rounded-full bg-brand-gradient text-white shadow-glow transition-transform duration-300 group-hover:scale-110">
                     <Play className="size-4" fill="currentColor" />
                   </span>
                 </div>

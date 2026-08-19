@@ -12,9 +12,11 @@ import {
   Users,
   AlertTriangle,
   Loader2,
-  Check,
   ExternalLink,
   RefreshCw,
+  Check,
+  Package,
+  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/format";
 
@@ -197,11 +199,11 @@ export function DownloadClient({
     <div dir={dir} className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
       {/* New Version Banner */}
       {newVersionAvailable && downloadUrl && (
-        <div className="mb-8 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-center backdrop-blur-sm">
+        <div className="mb-8 animate-in fade-in slide-in-from-top-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-center backdrop-blur-sm">
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
             <span className="flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-300">
               <RefreshCw className="size-4" />
-              New version v{displayVersion} is available
+              {locale === "ar" ? `إصدار جديد v${displayVersion} متاح` : `New version v${displayVersion} is available`}
             </span>
             <a
               href={downloadUrl}
@@ -218,7 +220,7 @@ export function DownloadClient({
 
       {/* Force Update Notice */}
       {versionInfo?.forceUpdate && versionInfo.forceUpdateMessage && (
-        <div className="mb-8 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-center backdrop-blur-sm">
+        <div className="mb-8 animate-in fade-in slide-in-from-top-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-center backdrop-blur-sm">
           <div className="flex flex-col items-center gap-2">
             <span className="flex items-center gap-2 text-sm font-semibold text-rose-700 dark:text-rose-300">
               <AlertTriangle className="size-4" />
@@ -226,7 +228,7 @@ export function DownloadClient({
             </span>
             {versionInfo.minVersion && (
               <span className="text-xs text-rose-500/80">
-                Minimum required version: v{versionInfo.minVersion}
+                {locale === "ar" ? `الإصدار الأدنى المطلوب: v${versionInfo.minVersion}` : `Minimum required version: v${versionInfo.minVersion}`}
               </span>
             )}
           </div>
@@ -238,26 +240,34 @@ export function DownloadClient({
         <div className="absolute -end-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
         <div className="absolute -bottom-24 -start-14 h-60 w-60 rounded-full bg-white/8 blur-3xl" />
         <div className="relative flex flex-col items-center text-center">
-          <span className="mb-5 flex size-20 items-center justify-center rounded-[1.25rem] bg-white/15 shadow-glow backdrop-blur-sm">
+          <span className="mb-5 flex size-20 items-center justify-center rounded-[1.25rem] bg-white/15 shadow-glow backdrop-blur-sm animate-in zoom-in-95 duration-500">
             <Download className="size-10" />
           </span>
-          <h1 className="font-heading text-3xl font-black tracking-tight sm:text-5xl">
+          <h1 className="font-heading text-3xl font-black tracking-tight sm:text-5xl animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
             {t.title}
           </h1>
-          <p className="mt-4 max-w-lg text-base text-white/80 sm:text-lg">
+          <p className="mt-4 max-w-lg text-base text-white/80 sm:text-lg animate-in fade-in slide-in-from-bottom-3 duration-700 delay-300">
             {t.tagline}
           </p>
           {versionInfo?.publishedAt && (
-            <p className="mt-3 text-sm text-white/60">
-              {t.releasedOn} {formatDate(versionInfo.publishedAt)}
-            </p>
+            <div className="mt-4 flex items-center gap-4 text-sm text-white/60 animate-in fade-in duration-700 delay-500">
+              <span className="flex items-center gap-1.5">
+                <Package className="size-3.5" />
+                v{displayVersion}
+              </span>
+              <span className="h-3 w-px bg-white/20" />
+              <span className="flex items-center gap-1.5">
+                <Calendar className="size-3.5" />
+                {formatDate(versionInfo.publishedAt)}
+              </span>
+            </div>
           )}
         </div>
       </div>
 
       {/* Platform Cards */}
       <div className="mb-16">
-        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight sm:text-3xl">
+        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight sm:text-3xl animate-in fade-in duration-500">
           {t.subtitle}
         </h2>
 
@@ -282,11 +292,11 @@ export function DownloadClient({
         ) : (
           <div className="grid gap-5 sm:grid-cols-3">
             {/* Android — Available */}
-            <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted sm:p-7">
+            <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lifted hover:border-emerald-500/50 sm:p-7 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-100">
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <div className="relative flex h-full flex-col">
                 <div className="flex items-start justify-between">
-                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-glow">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-glow transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                     <Smartphone className="size-7" />
                   </div>
                   <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
@@ -300,19 +310,19 @@ export function DownloadClient({
                   {t.androidDesc}
                 </p>
 
-                {/* Version badge */}
                 <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                  <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-semibold text-primary">
+                  <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 font-semibold text-primary">
+                    <Package className="size-3" />
                     v{displayVersion}
                   </span>
                   {versionInfo?.forceUpdate && (
-                    <span className="rounded-full bg-rose-500/10 px-2.5 py-0.5 font-semibold text-rose-500">
+                    <span className="flex items-center gap-1 rounded-full bg-rose-500/10 px-2.5 py-0.5 font-semibold text-rose-500">
+                      <AlertTriangle className="size-3" />
                       Required
                     </span>
                   )}
                 </div>
 
-                {/* Download button */}
                 <div className="mt-auto pt-5">
                   {downloadUrl ? (
                     <a
@@ -320,7 +330,7 @@ export function DownloadClient({
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(
-                        "flex w-full items-center justify-center gap-2.5 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-glow transition-all hover:opacity-95 hover:shadow-lifted hover:brightness-110",
+                        "flex w-full items-center justify-center gap-2.5 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-glow transition-all duration-300 hover:opacity-95 hover:shadow-lifted hover:brightness-110 active:scale-[0.98]",
                         versionInfo?.forceUpdate
                           ? "bg-gradient-to-r from-rose-500 to-orange-500"
                           : "bg-brand-gradient",
@@ -341,10 +351,11 @@ export function DownloadClient({
             </div>
 
             {/* Windows — Coming Soon */}
-            <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-55 sm:p-7">
-              <div className="relative">
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 sm:p-7 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-200">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex h-full flex-col">
                 <div className="flex items-start justify-between">
-                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/40 to-indigo-500/40 text-white/60">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/30 to-indigo-500/30 text-blue-500/70 transition-transform duration-300 group-hover:scale-110">
                     <Monitor className="size-7" />
                   </div>
                   <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
@@ -357,18 +368,21 @@ export function DownloadClient({
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {t.windowsDesc}
                 </p>
-                <div className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
-                  <Monitor className="size-4" />
-                  {t.comingSoon}
+                <div className="mt-auto pt-5">
+                  <div className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
+                    <Monitor className="size-4 opacity-50" />
+                    {t.comingSoon}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Mac — Coming Soon */}
-            <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-55 sm:p-7">
-              <div className="relative">
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 sm:p-7 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex h-full flex-col">
                 <div className="flex items-start justify-between">
-                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500/40 to-zinc-500/40 text-white/60">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500/30 to-zinc-500/30 text-slate-500/70 transition-transform duration-300 group-hover:scale-110">
                     <Apple className="size-7" />
                   </div>
                   <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
@@ -381,43 +395,46 @@ export function DownloadClient({
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {t.macDesc}
                 </p>
-                <div className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
-                  <Apple className="size-4" />
-                  {t.comingSoon}
+                <div className="mt-auto pt-5">
+                  <div className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
+                    <Apple className="size-4 opacity-50" />
+                    {t.comingSoon}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* System Requirements */}
-        {!loading && !error && (
-          <div className="mt-8 flex items-center justify-center gap-6 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <Check className="size-3.5 text-emerald-500" />
-              {t.requirementAndroid}
-            </span>
-            <span className="h-3 w-px bg-border" />
-            <span className="flex items-center gap-1.5">
-              <Check className="size-3.5 text-emerald-500" />
-              {t.systemRequirements}
-            </span>
+        {/* Release Notes */}
+        {!loading && !error && versionInfo?.releaseNotes && (
+          <div className="mt-8 rounded-2xl border border-border bg-card p-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-foreground mb-3">
+              <RefreshCw className="size-4 text-primary" />
+              {locale === "ar" ? "ملاحظات الإصدار" : "Release Notes"}
+            </h3>
+            <div className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+              {versionInfo.releaseNotes}
+            </div>
           </div>
         )}
       </div>
 
       {/* Features */}
       <div>
-        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight sm:text-3xl">
+        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight sm:text-3xl animate-in fade-in duration-500">
           {t.features}
         </h2>
         <div className="grid gap-5 sm:grid-cols-2">
-          {features.map((f) => {
+          {features.map((f, i) => {
             const Icon = f.icon;
             return (
               <div
                 key={f.title}
-                className="group relative overflow-hidden rounded-2xl border bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted"
+                className={cn(
+                  "group relative overflow-hidden rounded-2xl border bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted animate-in fade-in slide-in-from-bottom-3 duration-500",
+                  `delay-[${i * 100}ms]`,
+                )}
               >
                 <div
                   className={cn(
@@ -428,7 +445,7 @@ export function DownloadClient({
                 <div className="relative">
                   <div
                     className={cn(
-                      "flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-glow",
+                      "flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-glow transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3",
                       f.iconBg,
                     )}
                   >

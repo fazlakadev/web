@@ -53,7 +53,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <form onSubmit={(e) => void submit(e)} className="w-full space-y-2">
+    <form onSubmit={(e) => void submit(e)} className="w-full">
       <div className="flex gap-2">
         <div className="relative flex-1">
           <Mail className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -63,19 +63,21 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("newsletter.placeholder")}
-            className="rounded-full bg-secondary/70 ps-9"
+            className="rounded-full bg-secondary/70 ps-9 text-sm"
           />
         </div>
-        <Button type="submit" size={compact ? "sm" : "default"} disabled={busy}>
+        <Button type="submit" size="sm" disabled={busy} className="shrink-0 rounded-full px-4">
           {busy ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
-            <Send className="size-4" />
+            <>
+              <Send className="size-3.5" />
+              <span className="hidden sm:inline">{t("newsletter.subscribe")}</span>
+            </>
           )}
-          {!compact && t("newsletter.subscribe")}
         </Button>
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="mt-1.5 text-[11px] text-muted-foreground">
         {t("newsletter.privacyNote")}
       </p>
     </form>
