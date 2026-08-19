@@ -45,7 +45,11 @@
     "friends": "Friends",
     "messages": "Messages",
     "support": "Support",
-    "download": "Download App"
+    "download": "Download App",
+    "content": "Content",
+    "company": "Company",
+    "about": "About us",
+    "contact": "Contact"
   },
   "home": {
     "latestEpisodes": "Latest episodes",
@@ -470,9 +474,11 @@
     "faq": "FAQ",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "contact": "Contact",
-    "explore": "Explore",
-    "account": "Account"
+    "contact": "Contact us",
+    "explore": "Content",
+    "account": "Account",
+    "company": "Company",
+    "getApp": "Get the app"
   },
   "settings": {
     "title": "Settings",

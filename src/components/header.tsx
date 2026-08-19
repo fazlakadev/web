@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
+import { useEffect, useRef, useState } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import {
+  ChevronDown,
   History,
   ListVideo,
   LogOut,
@@ -18,6 +18,12 @@ import {
   UserPlus,
   Download,
   X,
+  Film,
+  BookOpen,
+  List,
+  Info,
+  HelpCircle,
+  ExternalLink,
 } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/providers/auth-provider";
@@ -51,17 +57,6 @@ export function Header() {
   const [mobileSearch, setMobileSearch] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-
-  const navLinks = useMemo(
-    () => [
-      { href: "/", label: t("nav.home") },
-      { href: "/browse", label: t("nav.browse") },
-      { href: "/seasons", label: t("nav.seasons") },
-      { href: "/articles", label: t("nav.articles") },
-      { href: "/playlists", label: t("nav.playlists") },
-    ],
-    [t],
-  );
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -148,7 +143,7 @@ export function Header() {
         )}
       />
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lifted animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-xl border border-border bg-popover p-1 text-popover-foreground shadow-lifted animate-in fade-in slide-in-from-top-2 duration-150">
           {suggestions.map((s) => {
             const Icon = TYPE_ICON[s.type] ?? Play;
             return (
@@ -156,9 +151,9 @@ export function Header() {
                 key={`${s.type}-${s.slug}`}
                 type="button"
                 onClick={() => router.push(suggestionHref(s))}
-                className="flex w-full items-center gap-2.5 rounded-sm px-2.5 py-2 text-start text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-start text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
               >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded bg-secondary text-muted-foreground">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
                   <Icon className="size-3.5" />
                 </span>
                 <span className="min-w-0 flex-1 truncate">{s.title}</span>
@@ -178,7 +173,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => submitSearch(q)}
-            className="flex w-full items-center gap-2.5 rounded-sm px-2.5 py-2 text-start text-sm font-medium text-primary transition-colors hover:bg-accent"
+            className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-start text-sm font-medium text-primary transition-colors hover:bg-accent"
           >
             <Search className="size-3.5" />
             {t("browse.searchAll", { query: q.trim() })}
@@ -193,11 +188,12 @@ export function Header() {
       <div className="relative mx-auto max-w-6xl">
         <div
           className={cn(
-            "glass flex h-14 items-center gap-2 rounded-full border border-border/70 px-2.5 shadow-soft transition-all duration-300 sm:px-4",
+            "glass flex h-14 items-center gap-1.5 rounded-full border border-border/70 px-2.5 shadow-soft transition-all duration-300 sm:px-4",
             scrolled && "glass-strong shadow-lifted",
           )}
         >
-          <Link href="/" className="flex shrink-0 items-center gap-2.5">
+          {/* Logo */}
+          <Link href="/" className="flex shrink-0 items-center gap-2 pe-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logoA.png"
@@ -211,217 +207,262 @@ export function Header() {
             </span>
           </Link>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          aria-label={t("nav.menu")}
-          onClick={() => setMobileOpen((v) => !v)}
-        >
-          {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
-        </Button>
+          {/* Mobile hamburger */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            aria-label={t("nav.menu")}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X className="size-4" /> : <Menu className="size-4" />}
+          </Button>
 
-        <nav className="ms-2 hidden items-center gap-1 lg:flex">
-          {navLinks.map((l) => (
+          {/* Desktop nav */}
+          <nav className="ms-1 hidden items-center gap-0.5 lg:flex">
             <Link
-              key={l.href}
-              href={l.href}
+              href="/"
               className={cn(
                 "relative rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                isActive(l.href)
+                isActive("/")
                   ? "text-primary"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground",
               )}
             >
-              {isActive(l.href) && (
+              {isActive("/") && (
                 <span className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-brand-gradient" />
               )}
-              {l.label}
+              {t("nav.home")}
             </Link>
-          ))}
-          <Link
-            href="/download"
-            className="relative rounded-lg px-3 py-2 text-sm font-medium transition-colors text-muted-foreground hover:bg-accent hover:text-foreground"
-          >
-            {t("nav.download")}
-          </Link>
-        </nav>
 
-        <div className="ms-auto flex items-center gap-1.5">
-          <div className="hidden w-56 md:block">{renderSearchBox()}</div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            aria-label={t("common.search")}
-            onClick={() => setMobileSearch((v) => !v)}
-          >
-            <Search className="size-4" />
-          </Button>
-
-          {user && <NotificationsBell />}
-          {user && (
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t("nav.support")}
-              onClick={() => router.push("/support")}
-            >
-              <CircleHelp className="size-4" />
-            </Button>
-          )}
-          <Link href="/download" className="hidden sm:inline-flex">
-            <Button size="sm" className="gap-1.5 rounded-full bg-brand-gradient text-white shadow-glow hover:opacity-90">
-              <Download className="size-3.5" />
-              {t("nav.download")}
-            </Button>
-          </Link>
-          <LanguageSwitcher />
-          <ThemeToggle />
-
-          {user ? (
+            {/* Content dropdown */}
             <Dropdown
-              align="end"
+              align="start"
               trigger={
-                <Button
-                  variant="outline"
-                  className="gap-2 rounded-full px-2"
-                >
-                  {user.avatarUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={user.avatarUrl}
-                      alt={user.name || user.username}
-                      width={28}
-                      height={28}
-                      className="size-7 rounded-full object-cover"
-                    />
-                  ) : (
-                    <span className="flex size-7 items-center justify-center rounded-full bg-brand-gradient text-xs font-bold text-primary-foreground">
-                      {userInitial}
-                    </span>
+                <button
+                  type="button"
+                  className={cn(
+                    "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    ["/browse", "/seasons", "/articles", "/playlists"].some((p) => isActive(p))
+                      ? "text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground",
                   )}
-                  <span className="hidden max-w-24 truncate text-sm sm:inline">
-                    {user.name || user.username}
-                  </span>
-                </Button>
+                >
+                  {t("nav.content")}
+                  <ChevronDown className="size-3.5 opacity-50" />
+                </button>
               }
             >
               {(close) => (
-                <div className="py-1">
+                <div className="min-w-48 py-1">
                   <DropdownItem
-                    onClick={() => {
-                      router.push("/favorites");
-                      close();
-                    }}
+                    onClick={() => { router.push("/browse"); close(); }}
                   >
                     <Play className="size-4" />
-                    {t("nav.favorites")}
+                    {t("nav.browse")}
                   </DropdownItem>
                   <DropdownItem
-                    onClick={() => {
-                      router.push("/history");
-                      close();
-                    }}
+                    onClick={() => { router.push("/seasons"); close(); }}
                   >
-                    <History className="size-4" />
-                    {t("nav.history")}
+                    <Film className="size-4" />
+                    {t("nav.seasons")}
                   </DropdownItem>
                   <DropdownItem
-                    onClick={() => {
-                      router.push("/continue-watching");
-                      close();
-                    }}
+                    onClick={() => { router.push("/articles"); close(); }}
                   >
-                    <ListVideo className="size-4" />
-                    {t("nav.continueWatching")}
+                    <BookOpen className="size-4" />
+                    {t("nav.articles")}
                   </DropdownItem>
                   <DropdownItem
-                    onClick={() => {
-                      router.push("/friends");
-                      close();
-                    }}
+                    onClick={() => { router.push("/playlists"); close(); }}
                   >
-                    <UserPlus className="size-4" />
-                    {t("nav.friends")}
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() => {
-                      router.push("/messages");
-                      close();
-                    }}
-                  >
-                    <MessageSquare className="size-4" />
-                    {t("nav.messages")}
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() => {
-                      router.push("/support");
-                      close();
-                    }}
-                  >
-                    <CircleHelp className="size-4" />
-                    {t("nav.support")}
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() => {
-                      router.push("/reports");
-                      close();
-                    }}
-                  >
-                    <Flag className="size-4" />
-                    {t("support.reportsTitle")}
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() => {
-                      router.push("/profile");
-                      close();
-                    }}
-                  >
-                    <UserIcon className="size-4" />
-                    {t("nav.profile")}
-                  </DropdownItem>
-                  <DropdownItem
-                    onClick={() => {
-                      router.push("/settings");
-                      close();
-                    }}
-                  >
-                    <Settings className="size-4" />
-                    {t("nav.settings")}
-                  </DropdownItem>
-                  <div className="my-1 h-px bg-border" />
-                  <DropdownItem
-                    onClick={() => {
-                      void logout();
-                      close();
-                    }}
-                  >
-                    <LogOut className="size-4" />
-                    {t("nav.logout")}
+                    <List className="size-4" />
+                    {t("nav.playlists")}
                   </DropdownItem>
                 </div>
               )}
             </Dropdown>
-          ) : (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push("/login")}
-                className="hidden sm:inline-flex"
+
+            {/* More dropdown */}
+            <Dropdown
+              align="start"
+              trigger={
+                <button
+                  type="button"
+                  className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  {t("nav.company")}
+                  <ChevronDown className="size-3.5 opacity-50" />
+                </button>
+              }
+            >
+              {(close) => (
+                <div className="min-w-44 py-1">
+                  <DropdownItem
+                    onClick={() => { router.push("/about"); close(); }}
+                  >
+                    <Info className="size-4" />
+                    {t("nav.about")}
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => { router.push("/faq"); close(); }}
+                  >
+                    <HelpCircle className="size-4" />
+                    {t("footer.faq")}
+                  </DropdownItem>
+                  <DropdownItem
+                    onClick={() => { router.push("/support"); close(); }}
+                  >
+                    <CircleHelp className="size-4" />
+                    {t("nav.support")}
+                  </DropdownItem>
+                  <div className="my-1 h-px bg-border" />
+                  <DropdownItem
+                    onClick={() => { router.push("/download"); close(); }}
+                  >
+                    <Download className="size-4" />
+                    {t("nav.download")}
+                  </DropdownItem>
+                </div>
+              )}
+            </Dropdown>
+          </nav>
+
+          {/* Right side */}
+          <div className="ms-auto flex items-center gap-1.5">
+            <div className="hidden w-52 md:block">{renderSearchBox()}</div>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              aria-label={t("common.search")}
+              onClick={() => setMobileSearch((v) => !v)}
+            >
+              <Search className="size-4" />
+            </Button>
+
+            {user && <NotificationsBell />}
+            <LanguageSwitcher />
+            <ThemeToggle />
+
+            {user ? (
+              <Dropdown
+                align="end"
+                trigger={
+                  <Button
+                    variant="outline"
+                    className="gap-2 rounded-full px-2"
+                  >
+                    {user.avatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={user.avatarUrl}
+                        alt={user.name || user.username}
+                        width={28}
+                        height={28}
+                        className="size-7 rounded-full object-cover"
+                      />
+                    ) : (
+                      <span className="flex size-7 items-center justify-center rounded-full bg-brand-gradient text-xs font-bold text-primary-foreground">
+                        {userInitial}
+                      </span>
+                    )}
+                    <span className="hidden max-w-24 truncate text-sm sm:inline">
+                      {user.name || user.username}
+                    </span>
+                  </Button>
+                }
               >
-                {t("nav.login")}
-              </Button>
-              <Button size="sm" onClick={() => router.push("/register")}>
-                {t("nav.register")}
-              </Button>
-            </>
-          )}
+                {(close) => (
+                  <div className="py-1">
+                    <DropdownItem
+                      onClick={() => { router.push("/favorites"); close(); }}
+                    >
+                      <Play className="size-4" />
+                      {t("nav.favorites")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/history"); close(); }}
+                    >
+                      <History className="size-4" />
+                      {t("nav.history")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/continue-watching"); close(); }}
+                    >
+                      <ListVideo className="size-4" />
+                      {t("nav.continueWatching")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/friends"); close(); }}
+                    >
+                      <UserPlus className="size-4" />
+                      {t("nav.friends")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/messages"); close(); }}
+                    >
+                      <MessageSquare className="size-4" />
+                      {t("nav.messages")}
+                    </DropdownItem>
+                    <div className="my-1 h-px bg-border" />
+                    <DropdownItem
+                      onClick={() => { router.push("/support"); close(); }}
+                    >
+                      <CircleHelp className="size-4" />
+                      {t("nav.support")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/reports"); close(); }}
+                    >
+                      <Flag className="size-4" />
+                      {t("support.reportsTitle")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/profile"); close(); }}
+                    >
+                      <UserIcon className="size-4" />
+                      {t("nav.profile")}
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => { router.push("/settings"); close(); }}
+                    >
+                      <Settings className="size-4" />
+                      {t("nav.settings")}
+                    </DropdownItem>
+                    <div className="my-1 h-px bg-border" />
+                    <DropdownItem
+                      onClick={() => { void logout(); close(); }}
+                    >
+                      <LogOut className="size-4" />
+                      {t("nav.logout")}
+                    </DropdownItem>
+                  </div>
+                )}
+              </Dropdown>
+            ) : (
+              <div className="hidden items-center gap-2 sm:flex">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push("/login")}
+                >
+                  {t("nav.login")}
+                </Button>
+                <Button
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => router.push("/register")}
+                >
+                  {t("nav.register")}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Mobile search */}
         {mobileSearch && (
           <div className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-border glass p-3 shadow-lifted md:hidden animate-in fade-in slide-in-from-top-1 duration-150">
             <form
@@ -435,50 +476,94 @@ export function Header() {
           </div>
         )}
 
+        {/* Mobile menu */}
         {mobileOpen && (
-          <nav className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-border glass p-2 shadow-lifted lg:hidden animate-in fade-in slide-in-from-top-1 duration-150">
-            {navLinks.map((l) => (
+          <div className="absolute inset-x-0 top-full mt-2 overflow-hidden rounded-2xl border border-border glass shadow-lifted lg:hidden animate-in fade-in slide-in-from-top-1 duration-150">
+            <nav className="p-2">
               <Link
-                key={l.href}
-                href={l.href}
+                href="/"
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium",
-                  isActive(l.href)
+                  "rounded-xl px-3 py-2.5 text-sm font-medium",
+                  isActive("/")
                     ? "bg-accent text-primary"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground",
                 )}
               >
-                {l.label}
+                {t("nav.home")}
               </Link>
-            ))}
-            <Link
-              href="/download"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
-            >
-              {t("nav.download")}
-            </Link>
-            {!user && (
-              <div className="flex gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  onClick={() => router.push("/login")}
-                >
-                  {t("nav.login")}
-                </Button>
-                <Button
-                  size="sm"
-                  className="flex-1"
-                  onClick={() => router.push("/register")}
-                >
-                  {t("nav.register")}
-                </Button>
+
+              <div className="px-3 pt-2 pb-1">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/60">{t("nav.content")}</p>
               </div>
-            )}
-          </nav>
+              {[
+                { href: "/browse", label: t("nav.browse"), icon: Play },
+                { href: "/seasons", label: t("nav.seasons"), icon: Film },
+                { href: "/articles", label: t("nav.articles"), icon: BookOpen },
+                { href: "/playlists", label: t("nav.playlists"), icon: List },
+              ].map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium",
+                    isActive(l.href)
+                      ? "bg-accent text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  )}
+                >
+                  <l.icon className="size-4" />
+                  {l.label}
+                </Link>
+              ))}
+
+              <div className="px-3 pt-3 pb-1">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/60">{t("nav.company")}</p>
+              </div>
+              {[
+                { href: "/about", label: t("nav.about"), icon: Info },
+                { href: "/faq", label: t("footer.faq"), icon: HelpCircle },
+                { href: "/support", label: t("nav.support"), icon: CircleHelp },
+                { href: "/download", label: t("nav.download"), icon: Download },
+              ].map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium",
+                    isActive(l.href)
+                      ? "bg-accent text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  )}
+                >
+                  <l.icon className="size-4" />
+                  {l.label}
+                </Link>
+              ))}
+
+              {!user && (
+                <div className="flex gap-2 px-3 pt-4 pb-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                    onClick={() => { router.push("/login"); setMobileOpen(false); }}
+                  >
+                    {t("nav.login")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-1 rounded-full"
+                    onClick={() => { router.push("/register"); setMobileOpen(false); }}
+                  >
+                    {t("nav.register")}
+                  </Button>
+                </div>
+              )}
+            </nav>
+          </div>
         )}
       </div>
     </header>

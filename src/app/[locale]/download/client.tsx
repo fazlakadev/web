@@ -12,6 +12,8 @@ import {
   Users,
   AlertTriangle,
   Loader2,
+  Check,
+  ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/format";
 
@@ -111,7 +113,7 @@ export function DownloadClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const displayVersion = versionInfo?.version ?? "1.2.0";
+  const displayVersion = versionInfo?.version ?? "1.0.0";
   const downloadUrl = versionInfo?.browserDownloadUrl ?? "#";
   const isRTL = locale === "ar";
   const dir = isRTL ? "rtl" : "ltr";
@@ -133,66 +135,66 @@ export function DownloadClient({
       icon: Zap,
       title: t.feature1Title,
       desc: t.feature1Desc,
-      gradient: "from-indigo-500/15 via-violet-500/15 to-fuchsia-500/15",
-      hoverGradient: "from-indigo-500 via-violet-500 to-fuchsia-500",
-      text: "text-indigo-600 dark:text-indigo-400",
+      gradient: "from-indigo-500/10 via-violet-500/10 to-fuchsia-500/10",
+      iconBg: "bg-gradient-to-br from-indigo-500 to-violet-500",
+      iconColor: "text-indigo-600 dark:text-indigo-400",
     },
     {
       icon: Shield,
       title: t.feature2Title,
       desc: t.feature2Desc,
-      gradient: "from-emerald-500/15 via-teal-500/15 to-cyan-500/15",
-      hoverGradient: "from-emerald-500 via-teal-500 to-cyan-500",
-      text: "text-emerald-600 dark:text-emerald-400",
+      gradient: "from-emerald-500/10 via-teal-500/10 to-cyan-500/10",
+      iconBg: "bg-gradient-to-br from-emerald-500 to-teal-500",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
     },
     {
       icon: Globe,
       title: t.feature3Title,
       desc: t.feature3Desc,
-      gradient: "from-amber-500/15 via-orange-500/15 to-rose-500/15",
-      hoverGradient: "from-amber-500 via-orange-500 to-rose-500",
-      text: "text-amber-600 dark:text-amber-400",
+      gradient: "from-amber-500/10 via-orange-500/10 to-rose-500/10",
+      iconBg: "bg-gradient-to-br from-amber-500 to-orange-500",
+      iconColor: "text-amber-600 dark:text-amber-400",
     },
     {
       icon: Users,
       title: t.feature4Title,
       desc: t.feature4Desc,
-      gradient: "from-fuchsia-500/15 via-pink-500/15 to-rose-500/15",
-      hoverGradient: "from-fuchsia-500 via-pink-500 to-rose-500",
-      text: "text-fuchsia-600 dark:text-fuchsia-400",
+      gradient: "from-fuchsia-500/10 via-pink-500/10 to-rose-500/10",
+      iconBg: "bg-gradient-to-br from-fuchsia-500 to-pink-500",
+      iconColor: "text-fuchsia-600 dark:text-fuchsia-400",
     },
   ];
 
   return (
-    <div dir={dir} className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div dir={dir} className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
       {/* Hero */}
-      <div className="relative mb-12 overflow-hidden rounded-[2rem] bg-brand-gradient p-8 text-white shadow-glow sm:p-12">
-        <div className="absolute -end-16 -top-16 h-48 w-48 rounded-full bg-white/15 blur-3xl" />
-        <div className="absolute -start-10 -bottom-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+      <div className="relative mb-16 overflow-hidden rounded-[2rem] bg-brand-gradient p-10 text-white shadow-glow sm:p-14">
+        <div className="absolute -end-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -bottom-24 -start-14 h-60 w-60 rounded-full bg-white/8 blur-3xl" />
         <div className="relative flex flex-col items-center text-center">
-          <span className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-white/15 shadow-glow">
-            <Download className="size-8" />
+          <span className="mb-5 flex size-20 items-center justify-center rounded-[1.25rem] bg-white/15 shadow-glow backdrop-blur-sm">
+            <Download className="size-10" />
           </span>
-          <h1 className="font-heading text-3xl font-black tracking-tight sm:text-4xl">
+          <h1 className="font-heading text-3xl font-black tracking-tight sm:text-5xl">
             {t.title}
           </h1>
-          <p className="mt-3 max-w-lg text-sm text-white/85 sm:text-base">
+          <p className="mt-4 max-w-md text-base text-white/80 sm:text-lg">
             {t.tagline}
           </p>
         </div>
       </div>
 
       {/* Download Card */}
-      <div className="glass-card mb-12 overflow-hidden rounded-3xl border border-border p-6 shadow-lifted sm:p-10">
+      <div className="glass-card mb-16 overflow-hidden rounded-3xl border border-border p-8 shadow-lifted sm:p-12">
         {loading ? (
-          <div className="flex flex-col items-center gap-4 py-8">
+          <div className="flex flex-col items-center gap-4 py-10">
             <Loader2 className="size-8 animate-spin text-muted-foreground" />
             <p className="text-sm text-muted-foreground">{t.loading}</p>
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center gap-4 py-8">
-            <div className="flex size-12 items-center justify-center rounded-full bg-rose-500/10">
-              <AlertTriangle className="size-6 text-rose-500" />
+          <div className="flex flex-col items-center gap-5 py-10">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-rose-500/10">
+              <AlertTriangle className="size-7 text-rose-500" />
             </div>
             <p className="text-sm text-muted-foreground">{t.error}</p>
             <button
@@ -203,95 +205,107 @@ export function DownloadClient({
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-8">
+            {/* Version info */}
             <div className="flex flex-col items-center gap-2">
-              <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                 {t.latestVersion}
-              </p>
-              <p className="font-heading text-4xl font-black tracking-tight">
+              </span>
+              <p className="font-heading text-5xl font-black tracking-tight">
                 v{displayVersion}
               </p>
               {versionInfo?.publishedAt && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   {t.releasedOn} {formatDate(versionInfo.publishedAt)}
                 </p>
               )}
             </div>
 
+            {/* Download button */}
             <a
               href={downloadUrl}
               download
-              className="group flex items-center gap-3 rounded-2xl bg-brand-gradient px-8 py-4 text-lg font-bold text-white shadow-glow transition-all hover:opacity-90 hover:shadow-lifted"
+              className="group flex items-center gap-3 rounded-2xl bg-brand-gradient px-10 py-4 text-lg font-bold text-white shadow-glow transition-all hover:opacity-95 hover:shadow-lifted hover:brightness-110"
             >
               <Download className="size-5 transition-transform group-hover:-translate-y-0.5" />
               {versionInfo?.version
                 ? `${t.downloadButton} v${versionInfo.version}`
                 : t.downloadButtonFallback}
+              <ArrowRight className="size-4 opacity-60 transition-transform group-hover:translate-x-0.5 rtl:rotate-180" />
             </a>
 
-            <p className="text-xs text-muted-foreground">
-              {t.systemRequirements}: {t.requirementAndroid}
-            </p>
+            {/* System requirements */}
+            <div className="flex items-center gap-6 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-500" />
+                {t.requirementAndroid}
+              </span>
+              <span className="h-3 w-px bg-border" />
+              <span className="flex items-center gap-1.5">
+                <Check className="size-3.5 text-emerald-500" />
+                {t.systemRequirements}
+              </span>
+            </div>
           </div>
         )}
       </div>
 
       {/* Platform Badges */}
-      <div className="mb-12">
-        <h2 className="mb-6 text-center font-heading text-xl font-bold tracking-tight">
+      <div className="mb-16">
+        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight">
           {t.subtitle}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-3">
           {/* Android */}
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-card p-5 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lifted">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100" />
+          <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="relative">
               <div className="flex items-start justify-between">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-glow">
-                  <Smartphone className="size-5" />
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-glow">
+                  <Smartphone className="size-6" />
                 </div>
-                <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                   {t.downloadButton.split(" ")[0]}
                 </span>
               </div>
-              <h3 className="mt-4 font-heading text-lg font-bold">{t.android}</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground">
+              <h3 className="mt-5 font-heading text-xl font-bold">{t.android}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                 {t.androidDesc}
               </p>
             </div>
           </div>
 
           {/* Windows */}
-          <div className="relative overflow-hidden rounded-2xl border bg-card p-5 opacity-60 shadow-soft transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-50 shadow-soft transition-all duration-300">
             <div className="relative">
               <div className="flex items-start justify-between">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/50 to-indigo-500/50 text-white/70">
-                  <Monitor className="size-5" />
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/40 to-indigo-500/40 text-white/60">
+                  <Monitor className="size-6" />
                 </div>
-                <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
+                <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                   {t.comingSoon}
                 </span>
               </div>
-              <h3 className="mt-4 font-heading text-lg font-bold">{t.windows}</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground">
+              <h3 className="mt-5 font-heading text-xl font-bold">{t.windows}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                 {t.windowsDesc}
               </p>
             </div>
           </div>
 
           {/* Mac */}
-          <div className="relative overflow-hidden rounded-2xl border bg-card p-5 opacity-60 shadow-soft transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-50 shadow-soft transition-all duration-300">
             <div className="relative">
               <div className="flex items-start justify-between">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-slate-500/50 to-zinc-500/50 text-white/70">
-                  <Apple className="size-5" />
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500/40 to-zinc-500/40 text-white/60">
+                  <Apple className="size-6" />
                 </div>
-                <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
+                <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                   {t.comingSoon}
                 </span>
               </div>
-              <h3 className="mt-4 font-heading text-lg font-bold">{t.mac}</h3>
-              <p className="mt-0.5 text-sm text-muted-foreground">
+              <h3 className="mt-5 font-heading text-xl font-bold">{t.mac}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                 {t.macDesc}
               </p>
             </div>
@@ -301,16 +315,16 @@ export function DownloadClient({
 
       {/* Features */}
       <div>
-        <h2 className="mb-6 text-center font-heading text-xl font-bold tracking-tight">
+        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight">
           {t.features}
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2">
           {features.map((f) => {
             const Icon = f.icon;
             return (
               <div
                 key={f.title}
-                className="group relative overflow-hidden rounded-2xl border bg-card p-5 shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lifted"
+                className="group relative overflow-hidden rounded-2xl border bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted"
               >
                 <div
                   className={cn(
@@ -321,16 +335,16 @@ export function DownloadClient({
                 <div className="relative">
                   <div
                     className={cn(
-                      "flex size-11 items-center justify-center rounded-xl bg-gradient-to-br text-white shadow-glow transition-colors",
-                      f.hoverGradient,
+                      "flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br text-white shadow-glow",
+                      f.iconBg,
                     )}
                   >
-                    <Icon className="size-5" />
+                    <Icon className="size-6" />
                   </div>
-                  <h3 className="mt-4 font-heading text-lg font-bold">
+                  <h3 className="mt-5 font-heading text-lg font-bold">
                     {f.title}
                   </h3>
-                  <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {f.desc}
                   </p>
                 </div>

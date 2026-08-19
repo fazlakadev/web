@@ -45,7 +45,11 @@
     "friends": "الأصدقاء",
     "messages": "الرسائل",
     "support": "الدعم الفني",
-    "download": "تحميل التطبيق"
+    "download": "تحميل التطبيق",
+    "content": "المحتوى",
+    "company": "الشركة",
+    "about": "من نحن",
+    "contact": "تواصل معنا"
   },
   "home": {
     "latestEpisodes": "أحدث الحلقات",
@@ -471,8 +475,10 @@
     "terms": "الشروط والأحكام",
     "privacy": "سياسة الخصوصية",
     "contact": "تواصل معنا",
-    "explore": "استكشف",
-    "account": "الحساب"
+    "explore": "المحتوى",
+    "account": "الحساب",
+    "company": "الشركة",
+    "getApp": "حمّل التطبيق"
   },
   "settings": {
     "title": "الإعدادات",
