@@ -26,6 +26,9 @@ async function fetchLatestVersion(): Promise<{
   releaseNotes?: string;
   publishedAt?: string;
   htmlUrl?: string;
+  forceUpdate?: boolean;
+  minVersion?: string | null;
+  forceUpdateMessage?: string | null;
 } | null> {
   try {
     const apiBase =
@@ -59,6 +62,9 @@ export default async function DownloadPage({
       releaseNotes={version?.releaseNotes ?? null}
       publishedAt={version?.publishedAt ?? null}
       htmlUrl={version?.htmlUrl ?? null}
+      forceUpdate={version?.forceUpdate ?? false}
+      minVersion={version?.minVersion ?? null}
+      forceUpdateMessage={version?.forceUpdateMessage ?? null}
       labels={{
         title: t("title"),
         tagline: t("tagline"),

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   Download,
   Smartphone,
@@ -13,8 +13,8 @@ import {
   AlertTriangle,
   Loader2,
   Check,
-  ArrowRight,
   ExternalLink,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/format";
 
@@ -24,6 +24,9 @@ interface VersionInfo {
   releaseNotes: string | null;
   publishedAt: string | null;
   htmlUrl: string | null;
+  forceUpdate: boolean;
+  minVersion: string | null;
+  forceUpdateMessage: string | null;
 }
 
 interface DownloadLabels {
@@ -64,6 +67,9 @@ export function DownloadClient({
   releaseNotes: initialNotes,
   publishedAt: initialDate,
   htmlUrl: initialHtmlUrl,
+  forceUpdate: initialForceUpdate = false,
+  minVersion: initialMinVersion = null,
+  forceUpdateMessage: initialForceMessage = null,
   labels: t,
 }: {
   locale: string;
@@ -72,6 +78,9 @@ export function DownloadClient({
   releaseNotes: string | null;
   publishedAt: string | null;
   htmlUrl: string | null;
+  forceUpdate?: boolean;
+  minVersion?: string | null;
+  forceUpdateMessage?: string | null;
   labels: DownloadLabels;
 }) {
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(
@@ -82,14 +91,22 @@ export function DownloadClient({
           releaseNotes: initialNotes,
           publishedAt: initialDate,
           htmlUrl: initialHtmlUrl,
+          forceUpdate: initialForceUpdate,
+          minVersion: initialMinVersion,
+          forceUpdateMessage: initialForceMessage,
         }
       : null,
   );
   const [loading, setLoading] = useState(!initialVersion);
   const [error, setError] = useState(!initialVersion);
+  const [newVersionAvailable, setNewVersionAvailable] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const currentVersionRef = useRef<string | null>(initialVersion);
 
-  const fetchVersion = async () => {
-    setLoading(true);
+  const fetchVersion = useCallback(async (isPoll = false) => {
+    if (!isPoll) setLoading(true);
+    if (isPoll) setIsRefreshing(true);
     setError(false);
     try {
       const apiBase =
@@ -98,26 +115,35 @@ export function DownloadClient({
       if (!res.ok) throw new Error("Failed");
       const json = await res.json();
       const data = json.data?.data;
-      setVersionInfo({
+      if (!data) throw new Error("No data");
+      const incoming: VersionInfo = {
         version: data.version,
         downloadUrl: data.downloadUrl ?? null,
         releaseNotes: data.releaseNotes ?? null,
         publishedAt: data.publishedAt ?? null,
         htmlUrl: data.htmlUrl ?? null,
-      });
+        forceUpdate: data.forceUpdate ?? false,
+        minVersion: data.minVersion ?? null,
+        forceUpdateMessage: data.forceUpdateMessage ?? null,
+      };
+      if (isPoll && currentVersionRef.current && incoming.version !== currentVersionRef.current) {
+        setNewVersionAvailable(true);
+      }
+      setVersionInfo(incoming);
+      currentVersionRef.current = incoming.version;
     } catch {
-      setError(true);
+      if (!isPoll) setError(true);
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (!initialVersion) {
-      fetchVersion();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!initialVersion) fetchVersion();
+    pollTimerRef.current = setInterval(() => fetchVersion(true), 60000);
+    return () => { if (pollTimerRef.current) clearInterval(pollTimerRef.current); };
+  }, [initialVersion, fetchVersion]);
 
   const displayVersion = versionInfo?.version ?? "1.0.0";
   const downloadUrl = versionInfo?.downloadUrl;
@@ -169,6 +195,44 @@ export function DownloadClient({
 
   return (
     <div dir={dir} className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+      {/* New Version Banner */}
+      {newVersionAvailable && downloadUrl && (
+        <div className="mb-8 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-center backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
+            <span className="flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-300">
+              <RefreshCw className="size-4" />
+              New version v{displayVersion} is available
+            </span>
+            <a
+              href={downloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand-gradient px-5 py-2 text-sm font-bold text-white shadow-glow transition-all hover:opacity-95"
+            >
+              <Download className="size-4" />
+              {t.downloadButton}
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Force Update Notice */}
+      {versionInfo?.forceUpdate && versionInfo.forceUpdateMessage && (
+        <div className="mb-8 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-center backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-2">
+            <span className="flex items-center gap-2 text-sm font-semibold text-rose-700 dark:text-rose-300">
+              <AlertTriangle className="size-4" />
+              {versionInfo.forceUpdateMessage}
+            </span>
+            {versionInfo.minVersion && (
+              <span className="text-xs text-rose-500/80">
+                Minimum required version: v{versionInfo.minVersion}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
       <div className="relative mb-16 overflow-hidden rounded-[2rem] bg-brand-gradient p-10 text-white shadow-glow sm:p-14">
         <div className="absolute -end-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
@@ -209,7 +273,7 @@ export function DownloadClient({
             </div>
             <p className="text-sm text-muted-foreground">{t.error}</p>
             <button
-              onClick={fetchVersion}
+              onClick={() => fetchVersion()}
               className="rounded-xl bg-brand-gradient px-6 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:opacity-90"
             >
               {t.retry}
@@ -241,6 +305,11 @@ export function DownloadClient({
                   <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-semibold text-primary">
                     v{displayVersion}
                   </span>
+                  {versionInfo?.forceUpdate && (
+                    <span className="rounded-full bg-rose-500/10 px-2.5 py-0.5 font-semibold text-rose-500">
+                      Required
+                    </span>
+                  )}
                 </div>
 
                 {/* Download button */}
@@ -250,7 +319,12 @@ export function DownloadClient({
                       href={downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-brand-gradient px-5 py-3 text-sm font-bold text-white shadow-glow transition-all hover:opacity-95 hover:shadow-lifted hover:brightness-110"
+                      className={cn(
+                        "flex w-full items-center justify-center gap-2.5 rounded-xl px-5 py-3 text-sm font-bold text-white shadow-glow transition-all hover:opacity-95 hover:shadow-lifted hover:brightness-110",
+                        versionInfo?.forceUpdate
+                          ? "bg-gradient-to-r from-rose-500 to-orange-500"
+                          : "bg-brand-gradient",
+                      )}
                     >
                       <Download className="size-4" />
                       {t.downloadButton}
