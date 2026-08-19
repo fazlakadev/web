@@ -22,9 +22,10 @@ export async function generateMetadata({
 
 async function fetchLatestVersion(): Promise<{
   version: string;
-  browser_download_url: string;
-  release_notes?: string;
-  published_at?: string;
+  downloadUrl: string;
+  releaseNotes?: string;
+  publishedAt?: string;
+  htmlUrl?: string;
 } | null> {
   try {
     const apiBase =
@@ -34,7 +35,7 @@ async function fetchLatestVersion(): Promise<{
     });
     if (!res.ok) return null;
     const json = await res.json();
-    return json.data ?? null;
+    return json.data?.data ?? null;
   } catch {
     return null;
   }
@@ -54,9 +55,10 @@ export default async function DownloadPage({
     <DownloadClient
       locale={locale}
       version={version?.version ?? null}
-      browserDownloadUrl={version?.browser_download_url ?? "#"}
-      releaseNotes={version?.release_notes ?? null}
-      publishedAt={version?.published_at ?? null}
+      downloadUrl={version?.downloadUrl ?? null}
+      releaseNotes={version?.releaseNotes ?? null}
+      publishedAt={version?.publishedAt ?? null}
+      htmlUrl={version?.htmlUrl ?? null}
       labels={{
         title: t("title"),
         tagline: t("tagline"),

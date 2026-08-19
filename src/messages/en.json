@@ -585,7 +585,8 @@
     "placeholder": "Your email",
     "subscribe": "Subscribe",
     "privacyNote": "No spam, and you can unsubscribe at any time.",
-    "subscribed": "You are subscribed. Check your inbox to confirm."
+    "subscribed": "Check your inbox to confirm your subscription.",
+    "alreadySubscribed": "You're already subscribed!"
   },
   "support": {
     "title": "Support center",

@@ -14,14 +14,16 @@ import {
   Loader2,
   Check,
   ArrowRight,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/format";
 
 interface VersionInfo {
   version: string;
-  browserDownloadUrl: string;
+  downloadUrl: string | null;
   releaseNotes: string | null;
   publishedAt: string | null;
+  htmlUrl: string | null;
 }
 
 interface DownloadLabels {
@@ -58,25 +60,28 @@ interface DownloadLabels {
 export function DownloadClient({
   locale,
   version: initialVersion,
-  browserDownloadUrl: initialUrl,
+  downloadUrl: initialUrl,
   releaseNotes: initialNotes,
   publishedAt: initialDate,
+  htmlUrl: initialHtmlUrl,
   labels: t,
 }: {
   locale: string;
   version: string | null;
-  browserDownloadUrl: string;
+  downloadUrl: string | null;
   releaseNotes: string | null;
   publishedAt: string | null;
+  htmlUrl: string | null;
   labels: DownloadLabels;
 }) {
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(
     initialVersion
       ? {
           version: initialVersion,
-          browserDownloadUrl: initialUrl,
+          downloadUrl: initialUrl,
           releaseNotes: initialNotes,
           publishedAt: initialDate,
+          htmlUrl: initialHtmlUrl,
         }
       : null,
   );
@@ -92,12 +97,13 @@ export function DownloadClient({
       const res = await fetch(`${apiBase}/api/v1/app-version/latest`);
       if (!res.ok) throw new Error("Failed");
       const json = await res.json();
-      const data = json.data;
+      const data = json.data?.data;
       setVersionInfo({
         version: data.version,
-        browserDownloadUrl: data.browser_download_url,
-        releaseNotes: data.release_notes ?? null,
-        publishedAt: data.published_at ?? null,
+        downloadUrl: data.downloadUrl ?? null,
+        releaseNotes: data.releaseNotes ?? null,
+        publishedAt: data.publishedAt ?? null,
+        htmlUrl: data.htmlUrl ?? null,
       });
     } catch {
       setError(true);
@@ -114,7 +120,7 @@ export function DownloadClient({
   }, []);
 
   const displayVersion = versionInfo?.version ?? "1.0.0";
-  const downloadUrl = versionInfo?.browserDownloadUrl ?? "#";
+  const downloadUrl = versionInfo?.downloadUrl;
   const isRTL = locale === "ar";
   const dir = isRTL ? "rtl" : "ltr";
 
@@ -137,7 +143,6 @@ export function DownloadClient({
       desc: t.feature1Desc,
       gradient: "from-indigo-500/10 via-violet-500/10 to-fuchsia-500/10",
       iconBg: "bg-gradient-to-br from-indigo-500 to-violet-500",
-      iconColor: "text-indigo-600 dark:text-indigo-400",
     },
     {
       icon: Shield,
@@ -145,7 +150,6 @@ export function DownloadClient({
       desc: t.feature2Desc,
       gradient: "from-emerald-500/10 via-teal-500/10 to-cyan-500/10",
       iconBg: "bg-gradient-to-br from-emerald-500 to-teal-500",
-      iconColor: "text-emerald-600 dark:text-emerald-400",
     },
     {
       icon: Globe,
@@ -153,7 +157,6 @@ export function DownloadClient({
       desc: t.feature3Desc,
       gradient: "from-amber-500/10 via-orange-500/10 to-rose-500/10",
       iconBg: "bg-gradient-to-br from-amber-500 to-orange-500",
-      iconColor: "text-amber-600 dark:text-amber-400",
     },
     {
       icon: Users,
@@ -161,12 +164,11 @@ export function DownloadClient({
       desc: t.feature4Desc,
       gradient: "from-fuchsia-500/10 via-pink-500/10 to-rose-500/10",
       iconBg: "bg-gradient-to-br from-fuchsia-500 to-pink-500",
-      iconColor: "text-fuchsia-600 dark:text-fuchsia-400",
     },
   ];
 
   return (
-    <div dir={dir} className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
+    <div dir={dir} className="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
       {/* Hero */}
       <div className="relative mb-16 overflow-hidden rounded-[2rem] bg-brand-gradient p-10 text-white shadow-glow sm:p-14">
         <div className="absolute -end-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
@@ -178,21 +180,30 @@ export function DownloadClient({
           <h1 className="font-heading text-3xl font-black tracking-tight sm:text-5xl">
             {t.title}
           </h1>
-          <p className="mt-4 max-w-md text-base text-white/80 sm:text-lg">
+          <p className="mt-4 max-w-lg text-base text-white/80 sm:text-lg">
             {t.tagline}
           </p>
+          {versionInfo?.publishedAt && (
+            <p className="mt-3 text-sm text-white/60">
+              {t.releasedOn} {formatDate(versionInfo.publishedAt)}
+            </p>
+          )}
         </div>
       </div>
 
-      {/* Download Card */}
-      <div className="glass-card mb-16 overflow-hidden rounded-3xl border border-border p-8 shadow-lifted sm:p-12">
+      {/* Platform Cards */}
+      <div className="mb-16">
+        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight sm:text-3xl">
+          {t.subtitle}
+        </h2>
+
         {loading ? (
-          <div className="flex flex-col items-center gap-4 py-10">
+          <div className="flex flex-col items-center gap-4 py-16">
             <Loader2 className="size-8 animate-spin text-muted-foreground" />
             <p className="text-sm text-muted-foreground">{t.loading}</p>
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center gap-5 py-10">
+          <div className="flex flex-col items-center gap-5 py-16">
             <div className="flex size-14 items-center justify-center rounded-2xl bg-rose-500/10">
               <AlertTriangle className="size-7 text-rose-500" />
             </div>
@@ -205,117 +216,125 @@ export function DownloadClient({
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-8">
-            {/* Version info */}
-            <div className="flex flex-col items-center gap-2">
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                {t.latestVersion}
-              </span>
-              <p className="font-heading text-5xl font-black tracking-tight">
-                v{displayVersion}
-              </p>
-              {versionInfo?.publishedAt && (
-                <p className="text-sm text-muted-foreground">
-                  {t.releasedOn} {formatDate(versionInfo.publishedAt)}
+          <div className="grid gap-5 sm:grid-cols-3">
+            {/* Android — Available */}
+            <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted sm:p-7">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex h-full flex-col">
+                <div className="flex items-start justify-between">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-glow">
+                    <Smartphone className="size-7" />
+                  </div>
+                  <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                    {t.latestVersion}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-heading text-xl font-bold">
+                  {t.android}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {t.androidDesc}
                 </p>
-              )}
+
+                {/* Version badge */}
+                <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-semibold text-primary">
+                    v{displayVersion}
+                  </span>
+                </div>
+
+                {/* Download button */}
+                <div className="mt-auto pt-5">
+                  {downloadUrl ? (
+                    <a
+                      href={downloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-brand-gradient px-5 py-3 text-sm font-bold text-white shadow-glow transition-all hover:opacity-95 hover:shadow-lifted hover:brightness-110"
+                    >
+                      <Download className="size-4" />
+                      {t.downloadButton}
+                      <ExternalLink className="size-3.5 opacity-60" />
+                    </a>
+                  ) : (
+                    <div className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-muted px-5 py-3 text-sm font-semibold text-muted-foreground">
+                      <AlertTriangle className="size-4" />
+                      {t.downloadButtonFallback}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Download button */}
-            <a
-              href={downloadUrl}
-              download
-              className="group flex items-center gap-3 rounded-2xl bg-brand-gradient px-10 py-4 text-lg font-bold text-white shadow-glow transition-all hover:opacity-95 hover:shadow-lifted hover:brightness-110"
-            >
-              <Download className="size-5 transition-transform group-hover:-translate-y-0.5" />
-              {versionInfo?.version
-                ? `${t.downloadButton} v${versionInfo.version}`
-                : t.downloadButtonFallback}
-              <ArrowRight className="size-4 opacity-60 transition-transform group-hover:translate-x-0.5 rtl:rotate-180" />
-            </a>
-
-            {/* System requirements */}
-            <div className="flex items-center gap-6 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <Check className="size-3.5 text-emerald-500" />
-                {t.requirementAndroid}
-              </span>
-              <span className="h-3 w-px bg-border" />
-              <span className="flex items-center gap-1.5">
-                <Check className="size-3.5 text-emerald-500" />
-                {t.systemRequirements}
-              </span>
+            {/* Windows — Coming Soon */}
+            <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-55 sm:p-7">
+              <div className="relative">
+                <div className="flex items-start justify-between">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/40 to-indigo-500/40 text-white/60">
+                    <Monitor className="size-7" />
+                  </div>
+                  <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
+                    {t.comingSoon}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-heading text-xl font-bold">
+                  {t.windows}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {t.windowsDesc}
+                </p>
+                <div className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
+                  <Monitor className="size-4" />
+                  {t.comingSoon}
+                </div>
+              </div>
             </div>
+
+            {/* Mac — Coming Soon */}
+            <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-55 sm:p-7">
+              <div className="relative">
+                <div className="flex items-start justify-between">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500/40 to-zinc-500/40 text-white/60">
+                    <Apple className="size-7" />
+                  </div>
+                  <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
+                    {t.comingSoon}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-heading text-xl font-bold">
+                  {t.mac}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {t.macDesc}
+                </p>
+                <div className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
+                  <Apple className="size-4" />
+                  {t.comingSoon}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* System Requirements */}
+        {!loading && !error && (
+          <div className="mt-8 flex items-center justify-center gap-6 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Check className="size-3.5 text-emerald-500" />
+              {t.requirementAndroid}
+            </span>
+            <span className="h-3 w-px bg-border" />
+            <span className="flex items-center gap-1.5">
+              <Check className="size-3.5 text-emerald-500" />
+              {t.systemRequirements}
+            </span>
           </div>
         )}
       </div>
 
-      {/* Platform Badges */}
-      <div className="mb-16">
-        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight">
-          {t.subtitle}
-        </h2>
-        <div className="grid gap-5 sm:grid-cols-3">
-          {/* Android */}
-          <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lifted">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative">
-              <div className="flex items-start justify-between">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-glow">
-                  <Smartphone className="size-6" />
-                </div>
-                <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  {t.downloadButton.split(" ")[0]}
-                </span>
-              </div>
-              <h3 className="mt-5 font-heading text-xl font-bold">{t.android}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                {t.androidDesc}
-              </p>
-            </div>
-          </div>
-
-          {/* Windows */}
-          <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-50 shadow-soft transition-all duration-300">
-            <div className="relative">
-              <div className="flex items-start justify-between">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/40 to-indigo-500/40 text-white/60">
-                  <Monitor className="size-6" />
-                </div>
-                <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                  {t.comingSoon}
-                </span>
-              </div>
-              <h3 className="mt-5 font-heading text-xl font-bold">{t.windows}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                {t.windowsDesc}
-              </p>
-            </div>
-          </div>
-
-          {/* Mac */}
-          <div className="group relative overflow-hidden rounded-2xl border bg-card p-6 opacity-50 shadow-soft transition-all duration-300">
-            <div className="relative">
-              <div className="flex items-start justify-between">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-500/40 to-zinc-500/40 text-white/60">
-                  <Apple className="size-6" />
-                </div>
-                <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                  {t.comingSoon}
-                </span>
-              </div>
-              <h3 className="mt-5 font-heading text-xl font-bold">{t.mac}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                {t.macDesc}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Features */}
       <div>
-        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight">
+        <h2 className="mb-8 text-center font-heading text-2xl font-black tracking-tight sm:text-3xl">
           {t.features}
         </h2>
         <div className="grid gap-5 sm:grid-cols-2">

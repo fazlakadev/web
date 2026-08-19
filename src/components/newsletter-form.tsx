@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
-import { Loader2, Mail, Send } from "lucide-react";
+import { Loader2, Mail, Send, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
   const locale = useLocale();
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
+  const [alreadySubscribed, setAlreadySubscribed] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,8 +26,14 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
         email: value,
         locale,
       });
-      toast.success(t(res.data.message ?? "newsletter.subscribed"));
-      setEmail("");
+      const msg = res.data.message;
+      if (msg === "newsletter.alreadySubscribed") {
+        setAlreadySubscribed(true);
+        toast.info(t("newsletter.alreadySubscribed"));
+      } else {
+        toast.success(t("newsletter.subscribed"));
+        setEmail("");
+      }
     } catch (err) {
       toast.error(
         (err as { message?: string })?.message || t("common.error"),
@@ -35,6 +42,15 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
       setBusy(false);
     }
   };
+
+  if (alreadySubscribed) {
+    return (
+      <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+        <CheckCircle2 className="size-4 shrink-0" />
+        {t("newsletter.alreadySubscribed")}
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={(e) => void submit(e)} className="w-full space-y-2">
