@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { LogIn } from "lucide-react";
 import { AuthForm } from "@/components/auth-form";
@@ -36,7 +37,9 @@ export default async function LoginPage({
           </div>
         </div>
         <div className="glass-card rounded-3xl border border-border p-6 shadow-lifted sm:p-8">
-          <OAuthError />
+          <Suspense fallback={null}>
+            <OAuthError />
+          </Suspense>
           <RedirectIfAuthed />
           <AuthForm mode="login" />
         </div>
