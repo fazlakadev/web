@@ -8,6 +8,7 @@ import { EpisodePosterCard, SeasonPosterCard, PlaylistPosterCard } from "@/compo
 import { ArticleCard } from "@/components/article-card";
 import { ContinueWatchingRow } from "@/components/continue-watching";
 import { PersonalizedRows } from "@/components/personalized-rows";
+import { DownloadCta } from "@/components/download-cta";
 import { AlertTriangle } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -73,6 +74,12 @@ export default async function HomePage({
         watchLabel={t("common.watchNow")}
         moreDetailsLabel={t("common.moreDetails")}
         viewsLabel={t("watch.views")}
+      />
+
+      <DownloadCta
+        title={t("home.downloadCta")}
+        description={t("home.downloadCtaDesc")}
+        buttonText={t("home.downloadNow")}
       />
 
       <ContinueWatchingRow locale={locale} />

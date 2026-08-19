@@ -44,7 +44,8 @@
     "settings": "الإعدادات",
     "friends": "الأصدقاء",
     "messages": "الرسائل",
-    "support": "الدعم الفني"
+    "support": "الدعم الفني",
+    "download": "تحميل التطبيق"
   },
   "home": {
     "latestEpisodes": "أحدث الحلقات",
@@ -54,7 +55,10 @@
     "myFavorites": "المفضلة لدي",
     "myPlaylists": "قوائم التشغيل الخاصة بي",
     "continueWatching": "أكمل المشاهدة",
-    "watchFree": "مشاهدة مجانية"
+    "watchFree": "مشاهدة مجانية",
+    "downloadCta": "حمّل تطبيق فذلكة",
+    "downloadCtaDesc": "شاهد مسلسلاتك وحلقاتك المفضلة على هاتفك. حمّل الآن لأفضل تجربة.",
+    "downloadNow": "حمّل الآن"
   },
   "browse": {
     "title": "جميع الحلقات",

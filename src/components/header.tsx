@@ -16,6 +16,7 @@ import {
   Flag,
   User as UserIcon,
   UserPlus,
+  Download,
   X,
 } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
@@ -238,6 +239,12 @@ export function Header() {
               {l.label}
             </Link>
           ))}
+          <Link
+            href="/download"
+            className="relative rounded-lg px-3 py-2 text-sm font-medium transition-colors text-muted-foreground hover:bg-accent hover:text-foreground"
+          >
+            {t("nav.download")}
+          </Link>
         </nav>
 
         <div className="ms-auto flex items-center gap-1.5">
@@ -264,6 +271,12 @@ export function Header() {
               <CircleHelp className="size-4" />
             </Button>
           )}
+          <Link href="/download" className="hidden sm:inline-flex">
+            <Button size="sm" className="gap-1.5 rounded-full bg-brand-gradient text-white shadow-glow hover:opacity-90">
+              <Download className="size-3.5" />
+              {t("nav.download")}
+            </Button>
+          </Link>
           <LanguageSwitcher />
           <ThemeToggle />
 
@@ -439,6 +452,13 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              href="/download"
+              onClick={() => setMobileOpen(false)}
+              className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+            >
+              {t("nav.download")}
+            </Link>
             {!user && (
               <div className="flex gap-2 pt-2">
                 <Button

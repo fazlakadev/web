@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { Mail } from "lucide-react";
+import { Mail, Download } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { FooterSocials } from "@/components/footer-socials";
@@ -47,6 +47,13 @@ export function Footer() {
               {l.label}
             </Link>
           ))}
+          <Link
+            href="/download"
+            className="mt-2 flex items-center gap-2 rounded-xl bg-brand-gradient px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition-all hover:opacity-90"
+          >
+            <Download className="size-4" />
+            {t("nav.download")}
+          </Link>
         </div>
 
         <div className="space-y-2">

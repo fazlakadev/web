@@ -44,7 +44,8 @@
     "settings": "Settings",
     "friends": "Friends",
     "messages": "Messages",
-    "support": "Support"
+    "support": "Support",
+    "download": "Download App"
   },
   "home": {
     "latestEpisodes": "Latest episodes",
@@ -54,7 +55,10 @@
     "myFavorites": "My favorites",
     "myPlaylists": "My playlists",
     "continueWatching": "Continue watching",
-    "watchFree": "Watch for free"
+    "watchFree": "Watch for free",
+    "downloadCta": "Get the Fazlaka App",
+    "downloadCtaDesc": "Watch your favorite series and episodes on your phone. Download now for the best experience.",
+    "downloadNow": "Download Now"
   },
   "browse": {
     "title": "All episodes",
