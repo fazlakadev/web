@@ -79,7 +79,7 @@ export function Footer() {
                 {[
                   { href: "/about", label: t("nav.about") },
                   { href: "/faq", label: t("footer.faq") },
-                  { href: "/support", label: t("nav.support") },
+                  { href: "/help", label: t("nav.support") },
                   { href: "/download", label: t("nav.download") },
                 ].map((l) => (
                   <li key={l.href}>

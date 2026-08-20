@@ -486,6 +486,15 @@
     "profile": "الملف الشخصي",
     "security": "الأمان",
     "sessions": "الأجهزة والجلسات",
+    "appearance": "المظهر",
+    "appearanceDesc": "تخصيص مظهر التطبيق",
+    "appearanceHint": "يمكنك تغيير المظهر من زر الإعدادات في شريط التنقل العلوي.",
+    "language": "اللغة",
+    "languageDesc": "تغيير لغة التطبيق",
+    "languageHint": "يمكنك تغيير اللغة من زر الإعدادات في شريط التنقل العلوي.",
+    "notifications": "الإشعارات",
+    "notificationsDesc": "إدارة إشعاراتك",
+    "notificationsHint": "إدارة إشعاراتك قريباً.",
     "phoneSection": "رقم الهاتف",
     "phoneLabel": "رقم الهاتف",
     "phoneNotSet": "لم تتم إضافة رقم هاتف",
@@ -902,5 +911,11 @@
     "retry": "حاول مرة أخرى",
     "systemRequirements": "حجم التحميل حوالي 10MB",
     "requirementAndroid": "يتطلب أندرويد 8.0 أو أعلى"
+  },
+  "help": {
+    "title": "مركز المساعدة",
+    "subtitle": "تذاكر الدعم وبلاغاتك — كل ما تحتاجه في مكان واحد.",
+    "tabTickets": "تذاكر الدعم",
+    "tabReports": "بلاغاتي"
   }
 }

@@ -144,14 +144,14 @@ function ProfileInner() {
 
   const links = [
     { href: "/favorites", icon: Play, label: t("user.favorites") },
-    { href: "/history", icon: History, label: t("user.history") },
+    { href: "/watch-history", icon: History, label: t("user.history") },
     {
-      href: "/continue-watching",
+      href: "/watch-history",
       icon: ListVideo,
       label: t("user.continueWatching"),
     },
-    { href: "/friends", icon: UserPlus, label: t("nav.friends") },
-    { href: "/messages", icon: MessageSquare, label: t("nav.messages") },
+    { href: "/community", icon: UserPlus, label: t("nav.friends") },
+    { href: "/community", icon: MessageSquare, label: t("nav.messages") },
     {
       href: `/u/${user.publicId ?? user.username}`,
       icon: Globe,

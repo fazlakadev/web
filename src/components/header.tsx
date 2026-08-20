@@ -298,7 +298,7 @@ export function Header() {
                   type="button"
                   className={cn(
                     "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200",
-                    ["/about", "/faq", "/support", "/download"].some((p) => isActive(p))
+                    ["/about", "/faq", "/help", "/download"].some((p) => isActive(p))
                       ? "text-primary"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground",
                   )}
@@ -318,7 +318,7 @@ export function Header() {
                   {[
                     { href: "/about", label: t("nav.about"), icon: Info },
                     { href: "/faq", label: t("footer.faq"), icon: HelpCircle },
-                    { href: "/support", label: t("nav.support"), icon: CircleHelp },
+                    { href: "/help", label: t("nav.support"), icon: CircleHelp },
                   ].map((item) => (
                     <DropdownItem
                       key={item.href}
@@ -499,42 +499,18 @@ export function Header() {
                       {t("nav.favorites")}
                     </DropdownItem>
                     <DropdownItem
-                      onClick={() => { router.push("/history"); close(); }}
+                      onClick={() => { router.push("/watch-history"); close(); }}
                     >
                       <History className="size-4" />
-                      {t("nav.history")}
+                      {t("user.history")}
                     </DropdownItem>
                     <DropdownItem
-                      onClick={() => { router.push("/continue-watching"); close(); }}
-                    >
-                      <ListVideo className="size-4" />
-                      {t("nav.continueWatching")}
-                    </DropdownItem>
-                    <DropdownItem
-                      onClick={() => { router.push("/friends"); close(); }}
-                    >
-                      <UserPlus className="size-4" />
-                      {t("nav.friends")}
-                    </DropdownItem>
-                    <DropdownItem
-                      onClick={() => { router.push("/messages"); close(); }}
+                      onClick={() => { router.push("/community"); close(); }}
                     >
                       <MessageSquare className="size-4" />
-                      {t("nav.messages")}
+                      {locale === "ar" ? "المجتمع" : "Community"}
                     </DropdownItem>
                     <div className="my-1 h-px bg-border" />
-                    <DropdownItem
-                      onClick={() => { router.push("/support"); close(); }}
-                    >
-                      <CircleHelp className="size-4" />
-                      {t("nav.support")}
-                    </DropdownItem>
-                    <DropdownItem
-                      onClick={() => { router.push("/reports"); close(); }}
-                    >
-                      <Flag className="size-4" />
-                      {t("support.reportsTitle")}
-                    </DropdownItem>
                     <DropdownItem
                       onClick={() => { router.push("/profile"); close(); }}
                     >
@@ -649,7 +625,7 @@ export function Header() {
               {[
                 { href: "/about", label: t("nav.about"), icon: Info },
                 { href: "/faq", label: t("footer.faq"), icon: HelpCircle },
-                { href: "/support", label: t("nav.support"), icon: CircleHelp },
+                { href: "/help", label: t("nav.support"), icon: CircleHelp },
                 { href: "/download", label: t("nav.download"), icon: Download },
               ].map((l) => (
                 <Link

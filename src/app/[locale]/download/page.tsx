@@ -23,7 +23,6 @@ export async function generateMetadata({
 async function fetchLatestVersion(): Promise<{
   version: string;
   downloadUrl: string;
-  releaseNotes?: string;
   publishedAt?: string;
   htmlUrl?: string;
   forceUpdate?: boolean;
@@ -38,7 +37,17 @@ async function fetchLatestVersion(): Promise<{
     });
     if (!res.ok) return null;
     const json = await res.json();
-    return json.data?.data ?? null;
+    const data = json.data?.data ?? null;
+    if (!data) return null;
+    return {
+      version: data.version,
+      downloadUrl: data.downloadUrl,
+      publishedAt: data.publishedAt,
+      htmlUrl: data.htmlUrl,
+      forceUpdate: data.forceUpdate,
+      minVersion: data.minVersion,
+      forceUpdateMessage: data.forceUpdateMessage,
+    };
   } catch {
     return null;
   }
@@ -59,7 +68,6 @@ export default async function DownloadPage({
       locale={locale}
       version={version?.version ?? null}
       downloadUrl={version?.downloadUrl ?? null}
-      releaseNotes={version?.releaseNotes ?? null}
       publishedAt={version?.publishedAt ?? null}
       htmlUrl={version?.htmlUrl ?? null}
       forceUpdate={version?.forceUpdate ?? false}

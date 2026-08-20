@@ -66,7 +66,6 @@ export function DownloadClient({
   locale,
   version: initialVersion,
   downloadUrl: initialUrl,
-  releaseNotes: initialNotes,
   publishedAt: initialDate,
   htmlUrl: initialHtmlUrl,
   forceUpdate: initialForceUpdate = false,
@@ -77,7 +76,6 @@ export function DownloadClient({
   locale: string;
   version: string | null;
   downloadUrl: string | null;
-  releaseNotes: string | null;
   publishedAt: string | null;
   htmlUrl: string | null;
   forceUpdate?: boolean;
@@ -90,7 +88,7 @@ export function DownloadClient({
       ? {
           version: initialVersion,
           downloadUrl: initialUrl,
-          releaseNotes: initialNotes,
+          releaseNotes: null,
           publishedAt: initialDate,
           htmlUrl: initialHtmlUrl,
           forceUpdate: initialForceUpdate,
@@ -406,16 +404,27 @@ export function DownloadClient({
           </div>
         )}
 
-        {/* Release Notes */}
-        {!loading && !error && versionInfo?.releaseNotes && (
+        {/* What's New — sanitized summary instead of raw release notes */}
+        {!loading && !error && versionInfo?.htmlUrl && (
           <div className="mt-8 rounded-2xl border border-border bg-card p-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
             <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-foreground mb-3">
               <RefreshCw className="size-4 text-primary" />
-              {locale === "ar" ? "ملاحظات الإصدار" : "Release Notes"}
+              {locale === "ar" ? "الإصدار الأخير" : "Latest Release"}
             </h3>
-            <div className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
-              {versionInfo.releaseNotes}
-            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              {locale === "ar"
+                ? `الإصدار v${displayVersion} متاح للتحميل. اضغط على الزر لعرض التفاصيل.`
+                : `Version v${displayVersion} is available for download. Click the button for details.`}
+            </p>
+            <a
+              href={versionInfo.htmlUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-secondary/70 px-4 py-2 text-sm font-medium text-foreground transition-all hover:bg-secondary hover:shadow-sm"
+            >
+              <ExternalLink className="size-3.5" />
+              {locale === "ar" ? "عرض على GitHub" : "View on GitHub"}
+            </a>
           </div>
         )}
       </div>
