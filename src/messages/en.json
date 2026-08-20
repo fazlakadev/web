@@ -911,5 +911,11 @@
     "retry": "Try again",
     "systemRequirements": "Download size ~10MB",
     "requirementAndroid": "Requires Android 8.0+"
+  },
+  "help": {
+    "title": "Help Center",
+    "subtitle": "Support tickets and your reports — everything you need in one place.",
+    "tabTickets": "Support Tickets",
+    "tabReports": "My Reports"
   }
 }

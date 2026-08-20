@@ -902,5 +902,11 @@
     "retry": "Réessayer",
     "systemRequirements": "Taille du téléchargement ~10 Mo",
     "requirementAndroid": "Nécessite Android 8.0 ou supérieur"
+  },
+  "help": {
+    "title": "Centre d'aide",
+    "subtitle": "Tickets de support et vos signalements — tout ce dont vous avez besoin en un seul endroit.",
+    "tabTickets": "Tickets de support",
+    "tabReports": "Mes signalements"
   }
 }
