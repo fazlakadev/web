@@ -20,7 +20,7 @@ export async function generateMetadata({
   };
 }
 
-async function fetchLatestVersion(): Promise<{
+type VersionInfo = {
   version: string;
   downloadUrl: string;
   publishedAt?: string;
@@ -28,11 +28,14 @@ async function fetchLatestVersion(): Promise<{
   forceUpdate?: boolean;
   minVersion?: string | null;
   forceUpdateMessage?: string | null;
-} | null> {
+} | null;
+
+async function fetchPlatformVersion(platform: string): Promise<VersionInfo> {
   try {
     const apiBase =
       process.env.NEXT_PUBLIC_API_URL || "https://api.fazlaka.com";
     const res = await fetch(`${apiBase}/api/v1/app-version/latest`, {
+      headers: { "x-app-platform": platform },
       cache: "no-store",
     });
     if (!res.ok) return null;
@@ -61,18 +64,25 @@ export default async function DownloadPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("download");
-  const version = await fetchLatestVersion();
+  const [androidVersion, windowsVersion] = await Promise.all([
+    fetchPlatformVersion("MOBILE"),
+    fetchPlatformVersion("WINDOWS"),
+  ]);
 
   return (
     <DownloadClient
       locale={locale}
-      version={version?.version ?? null}
-      downloadUrl={version?.downloadUrl ?? null}
-      publishedAt={version?.publishedAt ?? null}
-      htmlUrl={version?.htmlUrl ?? null}
-      forceUpdate={version?.forceUpdate ?? false}
-      minVersion={version?.minVersion ?? null}
-      forceUpdateMessage={version?.forceUpdateMessage ?? null}
+      version={androidVersion?.version ?? null}
+      downloadUrl={androidVersion?.downloadUrl ?? null}
+      publishedAt={androidVersion?.publishedAt ?? null}
+      htmlUrl={androidVersion?.htmlUrl ?? null}
+      forceUpdate={androidVersion?.forceUpdate ?? false}
+      minVersion={androidVersion?.minVersion ?? null}
+      forceUpdateMessage={androidVersion?.forceUpdateMessage ?? null}
+      windowsVersion={windowsVersion?.version ?? null}
+      windowsDownloadUrl={windowsVersion?.downloadUrl ?? null}
+      windowsPublishedAt={windowsVersion?.publishedAt ?? null}
+      windowsHtmlUrl={windowsVersion?.htmlUrl ?? null}
       labels={{
         title: t("title"),
         tagline: t("tagline"),

@@ -71,6 +71,10 @@ export function DownloadClient({
   forceUpdate: initialForceUpdate = false,
   minVersion: initialMinVersion = null,
   forceUpdateMessage: initialForceMessage = null,
+  windowsVersion = null,
+  windowsDownloadUrl = null,
+  windowsPublishedAt = null,
+  windowsHtmlUrl = null,
   labels: t,
 }: {
   locale: string;
@@ -81,6 +85,10 @@ export function DownloadClient({
   forceUpdate?: boolean;
   minVersion?: string | null;
   forceUpdateMessage?: string | null;
+  windowsVersion?: string | null;
+  windowsDownloadUrl?: string | null;
+  windowsPublishedAt?: string | null;
+  windowsHtmlUrl?: string | null;
   labels: DownloadLabels;
 }) {
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(
@@ -348,17 +356,23 @@ export function DownloadClient({
               </div>
             </div>
 
-            {/* Windows — Coming Soon */}
-            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 sm:p-7 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-200">
+            {/* Windows — Available or Coming Soon */}
+            <div className="group relative overflow-hidden rounded-2xl border border-blue-500/30 bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lifted hover:border-blue-500/50 sm:p-7 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-200">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <div className="relative flex h-full flex-col">
                 <div className="flex items-start justify-between">
-                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/30 to-indigo-500/30 text-blue-500/70 transition-transform duration-300 group-hover:scale-110">
+                  <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-glow transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                     <Monitor className="size-7" />
                   </div>
-                  <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
-                    {t.comingSoon}
-                  </span>
+                  {windowsDownloadUrl ? (
+                    <span className="rounded-full bg-blue-500/15 px-3 py-1 text-xs font-bold text-blue-600 dark:text-blue-400">
+                      {t.latestVersion}
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">
+                      {t.comingSoon}
+                    </span>
+                  )}
                 </div>
                 <h3 className="mt-5 font-heading text-xl font-bold">
                   {t.windows}
@@ -366,11 +380,34 @@ export function DownloadClient({
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {t.windowsDesc}
                 </p>
-                <div className="mt-auto pt-5">
-                  <div className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
-                    <Monitor className="size-4 opacity-50" />
-                    {t.comingSoon}
+
+                {windowsDownloadUrl && windowsVersion && (
+                  <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 rounded-full bg-blue-500/10 px-2.5 py-0.5 font-semibold text-blue-600 dark:text-blue-400">
+                      <Package className="size-3" />
+                      v{windowsVersion}
+                    </span>
                   </div>
+                )}
+
+                <div className="mt-auto pt-5">
+                  {windowsDownloadUrl ? (
+                    <a
+                      href={windowsDownloadUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-5 py-3 text-sm font-bold text-white shadow-glow transition-all duration-300 hover:opacity-95 hover:shadow-lifted hover:brightness-110 active:scale-[0.98]"
+                    >
+                      <Download className="size-4" />
+                      {t.downloadButton}
+                      <ExternalLink className="size-3.5 opacity-60" />
+                    </a>
+                  ) : (
+                    <div className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-dashed border-border px-5 py-3 text-sm font-semibold text-muted-foreground">
+                      <Monitor className="size-4 opacity-50" />
+                      {t.comingSoon}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
