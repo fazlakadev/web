@@ -114,7 +114,7 @@ export function DownloadClient({
       const res = await fetch(`${apiBase}/api/v1/app-version/latest`);
       if (!res.ok) throw new Error("Failed");
       const json = await res.json();
-      const data = json.data?.data;
+      const data = json.data;
       if (!data) throw new Error("No data");
       const incoming: VersionInfo = {
         version: data.version,

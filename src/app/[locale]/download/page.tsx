@@ -37,7 +37,7 @@ async function fetchLatestVersion(): Promise<{
     });
     if (!res.ok) return null;
     const json = await res.json();
-    const data = json.data?.data ?? null;
+    const data = json.data ?? null;
     if (!data) return null;
     return {
       version: data.version,
