@@ -323,7 +323,7 @@ function ProfileInner() {
             </div>
           ) : null}
 
-          {referrals && (referrals.referrals.length > 0 || referrals.referralCode) ? (
+          {referrals && ((referrals.referrals?.length ?? 0) > 0 || referrals.referralCode) ? (
             <div className="mt-6 flex flex-col gap-3 rounded-xl border border-border bg-background/60 p-4">
               <div className="flex items-center gap-3">
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -333,18 +333,18 @@ function ProfileInner() {
                   <p className="text-sm font-bold">{t("user.referralsTitle")}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
                     {t("user.referralsSubtitle", {
-                      count: referrals.referrals.length,
+                      count: referrals.referrals?.length ?? 0,
                     })}
                   </p>
                 </div>
               </div>
-              {referrals.referrals.length === 0 ? (
+              {referrals.referrals?.length === 0 ? (
                 <p className="px-1 text-xs text-muted-foreground">
                   {t("user.referralsEmpty")}
                 </p>
               ) : (
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  {referrals.referrals.map((r) => (
+                  {(referrals.referrals ?? []).map((r) => (
                     <div
                       key={r.id}
                       className="flex items-center gap-3 rounded-lg border border-border bg-background/60 p-3"
